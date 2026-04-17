@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Hostel Room Booking</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Chatbot Styles */
+        #chatbot-launcher {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #00d2ff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transition: transform 0.3s;
+        }
+        #chatbot-launcher:hover { transform: scale(1.1); }
+
+        #chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 320px;
+            height: 450px;
+            background: #1e293b;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chat-header {
+            background: #00d2ff;
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .bot-msg { background: rgba(255,255,255,0.1); color: white; align-self: flex-start; }
+        .user-msg { background: #00d2ff; color: white; align-self: flex-end; }
+
+        .chat-footer {
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            gap: 5px;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        .chat-footer button {
+            background: #00d2ff;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Smart Hostel</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#rooms">Rooms</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="overlay">
+            <div class="sub-title">Smart Hostel</div>
+            <h1>Smart Hostel Room Booking</h1>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-container">
+            <div class="stat-item">
+                <i class="fas fa-user-graduate"></i>
+                <h2>500+</h2>
+                <p>Happy Students</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-bed"></i>
+                <h2 id="roomCountText">0</h2>
+                <p>Premium Rooms</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-shield-alt"></i>
+                <h2>24/7</h2>
+                <p>Full Security</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-utensils"></i>
+                <h2>300+</h2>
+                <p>Daily Meal Delivery</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h1>Our Core Features</h1>
+        <div class="feature-box">
+            <div class="box"><i class="fas fa-clock"></i> Real-Time Availability</div>
+            <div class="box"><i class="fas fa-lock"></i> Secure Booking</div>
+            <div class="box"><i class="fas fa-credit-card"></i> Online Payment</div>
+        </div>
+    </section>
+
+    <section class="room-preview" id="rooms">
+        <h1>Featured Rooms</h1>
+        <div class="room-grid" id="roomContainer"></div>
+    </section>
+
+    <section class="how-it-works">
+        <h1>How It Works</h1>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Search</h3>
+                <p>Find your preferred room type from our list.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Book</h3>
+                <p>Fill out the application form with your details.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Pay</h3>
+                <p>Complete payment securely via bKash or Cards.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <h3>Stay</h3>
+                <p>Check in and enjoy your smart hostel life!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <h1>What Our Students Say</h1>
+        <div class="test-grid">
+            <div class="test-card">
+                <p>"The meal system is so easy to manage. I love the transparency!"</p>
+                <h4>- jarif ovi</h4>
+            </div>
+            <div class="test-card">
+                <p>"Booking was seamless, and the room was exactly as shown."</p>
+                <h4>- mehedi hasan</h4>
+            </div>
+        </div>
+    </section>
+
+    <div id="chatbot-launcher" onclick="toggleChat()">
+        <i class="fas fa-comment-dots fa-2x"></i>
+    </div>
+
+    <div id="chatbot-container">
+        <div class="chat-header">
+            <span>Hostel Assistant</span>
+            <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="message bot-msg">Hello! I'm your Smart Assistant. How can I help you today?</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Ask me something..." onkeypress="handleChatKey(event)">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <h3>Smart Hostel</h3>
+                <p>A digital solution for modern student living. Secure, Easy, and Reliable.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Rooms</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-phone"></i> +8801940538340</p>
+                <p><i class="fas fa-envelope"></i> redwanrafi8659@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh</p>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/share/1EuEffEZWk/" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.linkedin.com/in/md-redwan-mahbub-rafi-3bb5b3258" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/_cool_red_wine_" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <p class="copyright">&copy; 2026 Smart Hostel Management System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // ১. রুম লোড করার স্ক্রিপ্ট
+        function loadFeaturedRooms() {
+            const roomContainer = document.getElementById('roomContainer');
+            const roomCountText = document.getElementById('roomCountText');
+            let rooms = JSON.parse(localStorage.getItem('allRooms')) || [];
+            roomCountText.innerText = rooms.length + "+";
+
+            if(rooms.length === 0) {
+                roomContainer.innerHTML = `<p style="grid-column: span 3; color: gray; text-align: center;">Currently no rooms are available for booking.</p>`;
+                return;
+            }
+
+            roomContainer.innerHTML = rooms.map(room => `
+                <div class="room-card">
+                    <div class="room-img" style="background-image: url('${room.image}');"></div>
+                    <div class="room-info">
+                        <h3>${room.name}</h3>
+                        <p>BDT ${room.price} / Month</p>
+                        <button class="btn" onclick="location.href='login.html'">View Details</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ২. চ্যাটবট ডেটাবেস (৫০টি প্রশ্ন)
+   const botKnowledge = {
+    // === ১. সম্ভাষণ (Greetings - 15 items) ===
+    "hi": "Hello! Welcome to Smart Hostel. How can I help you?",
+    "hello": "Hi there! Looking for a room or have questions?",
+    "hey": "Hey! How can I assist you today?",
+    "good morning": "Good morning! Hope you have a productive day.",
+    "good afternoon": "Good afternoon! How is your day going?",
+    "good evening": "Good evening! Ready to check our premium rooms?",
+    "who are you": "I am your Smart Hostel Assistant.",
+    "how are you": "I'm doing great! Ready to find you a perfect stay.",
+    "thanks": "You're welcome! Let me know if you need more help.",
+    "thank you": "Happy to help! Visit us anytime.",
+    "bye": "Goodbye! Have a great day.",
+    "nice to meet you": "Nice to meet you too! Hope you join our hostel family.",
+    "assalamu alaikum": "Walaikum Assalam! How can I help you today?",
+    "namaste": "Namaste! How can I assist you?",
+    "whats up": "Not much, just here to help you book your next room!",
+
+    // === ২. রুম এবং প্রাইসিং (Rooms & Pricing - 20 items) ===
+    "price": "Our prices start from BDT 3,000 to 8,000 per month.",
+    "rent": "Monthly rent depends on the room type (Single/Double/Master).",
+    "single room": "Single rooms provide full privacy and cost BDT 6,000 - 8,000.",
+    "double room": "Double rooms are shared by two, costing BDT 4,000 - 5,000 per person.",
+    "triple room": "Triple rooms are BDT 3,500 per person.",
+    "master bed": "Master rooms have attached bath and balcony, cost BDT 8,500.",
+    "cheap": "Our most affordable room is the 4-seat shared room at BDT 3,000.",
+    "expensive": "Our VIP single rooms are the most premium at BDT 9,000.",
+    "ac": "Yes, we have AC rooms available for extra comfort.",
+    "non ac": "Our non-AC rooms are well-ventilated and cost BDT 4,000 - 6,000.",
+    "available": "Currently, we have a few seats in Double and Single rooms.",
+    "vacancy": "Seats are filling up fast! Better book yours today.",
+    "advance": "We require one month's rent as a security deposit.",
+    "security deposit": "The security deposit is refundable when you leave.",
+    "discount": "We offer a 10% discount on the first month for early bookings.",
+    "booking fee": "A small booking fee of BDT 500 is required to hold a seat.",
+    "seat": "Yes, we have seats available in the 4-person shared room.",
+    "attached bath": "Master rooms and some single rooms have attached bathrooms.",
+    "balcony": "Selected premium rooms come with private balconies.",
+    "renovated": "All our rooms were recently renovated for a modern look.",
+
+    // === ৩. খাবার ও মিল (Food & Meal - 15 items) ===
+    "meal": "We provide 3 healthy meals a day. You can manage them via app.",
+    "breakfast": "Breakfast (8 AM): Paratha, Vaji, Egg or Tea.",
+    "lunch": "Lunch (1:30 PM): Rice, Fish/Meat, Vegetable, and Dal.",
+    "dinner": "Dinner (9 PM): Rice/Roti with Chicken/Fish curry.",
+    "food": "Our food is home-cooked and hygienic.",
+    "menu": "Our menu changes daily. You can see it on the notice board.",
+    "biryani": "We serve special Biryani every Friday night!",
+    "vegetarian": "Yes, we provide special veg-only meals on request.",
+    "kitchen": "We have a common kitchen if you want to cook yourself.",
+    "filter": "We provide RO filtered pure drinking water 24/7.",
+    "dining": "Our dining hall is spacious and cleaned 3 times a day.",
+    "feast": "Monthly grand feasts are organized for all residents.",
+    "non veg": "We serve Chicken, Fish, and Beef on a rotating schedule.",
+    "egg": "Eggs are served 3 times a week in breakfast or lunch.",
+    "milk": "Fresh milk is available every evening on demand.",
+
+    // === ৪. সুযোগ-সুবিধা (Facilities - 15 items) ===
+    "wifi": "We have high-speed 50Mbps Wi-Fi on every floor.",
+    "internet": "Unlimited internet is included in your monthly rent.",
+    "generator": "We have a 24/7 generator for power backup.",
+    "lift": "Our building has a modern lift for your convenience.",
+    "laundry": "Laundry service is available twice a week.",
+    "washing machine": "Common washing machines are available for students.",
+    "security": "Our hostel is 24/7 CCTV protected with guards.",
+    "gym": "We have a basic gym area for fitness lovers.",
+    "library": "There is a quiet study zone/library available 24/7.",
+    "fridge": "Common refrigerators are available on each floor.",
+    "cleaning": "Rooms are cleaned daily by our professional staff.",
+    "water": "24/7 hot and cold water supply is available.",
+    "parking": "Secure bike and cycle parking is available.",
+    "tv": "There is a large LED TV in the common room.",
+    "locker": "Personal lockers are provided for your valuables.",
+
+    // === ৫. নিয়মাবলী (Rules & Regulations - 15 items) ===
+    "rules": "No loud music after 11 PM and entry before 10 PM.",
+    "gate": "The main gate closes at 10:00 PM sharp.",
+    "guest": "Male guests are allowed in the lobby until 8 PM.",
+    "overnight": "Overnight stay for guests is strictly prohibited.",
+    "smoking": "Smoking and drugs are 100% prohibited in the hostel.",
+    "id card": "Students must carry their ID cards for security.",
+    "discipline": "We maintain a strictly disciplined environment.",
+    "notice": "A 1-month notice is required before vacating the room.",
+    "refund": "Security deposit is refunded after adjusting any dues.",
+    "penalty": "Fine is applicable for late payment after the 10th of each month.",
+    "noise": "Keep the noise low to avoid disturbing others.",
+    "visit": "Guardians can visit between 10 AM to 6 PM.",
+    "electricity": "Please turn off fans and lights when leaving the room.",
+    "damage": "Any damage to hostel property will be charged to the student.",
+    "pet": "Pets are not allowed in the hostel premises.",
+
+    // === ৬. কন্টাক্ট ও লোকেশন (Contact & Location - 10 items) ===
+    "location": "Sector 10, Uttara, Dhaka (Near Metro Station).",
+    "contact": "Call us at +8801940538340 for details.",
+    "address": "House 45, Road 12, Uttara, Dhaka.",
+    "owner": "Managed by Smart Management Ltd.",
+    "email": "support@smarthostel.com",
+    "map": "Search 'Smart Hostel' on Google Maps for the exact location.",
+    "phone": "Our official number is +8801940538340.",
+    "whatsapp": "You can message us on WhatsApp at the same number.",
+    "fb": "Visit our Facebook page: facebook.com/smarthostel",
+    "visit us": "You are welcome to visit our hostel any day (10am-5pm).",
+
+    // === ৭. অন্যান্য (Misc - 10 items) ===
+    "emergency": "For any emergency, call the manager at +8801940538340.",
+    "hospital": "Uttara Adhunik Hospital is just 5 mins away.",
+    "doctor": "We have a doctor-on-call for our residents.",
+    "app": "Our Android app is coming soon on the Play Store!",
+    "payment": "We accept bKash, Nagad, and Bank Transfer.",
+    "university": "Students from IUBAT, AIUB, and DIU stay here.",
+    "internship": "We offer part-time jobs in management for our students.",
+    "admission": "Admission fee is BDT 2,000 (One-time).",
+    "laundry cost": "Laundry is BDT 500 per month (Optional).",
+    "newspaper": "Daily Bangla and English newspapers are provided.",
+    
+    // Default reply for everything else
+    "default": "I'm still learning! Please contact us at +8801940538340 for specific info."
+};
+
+// চ্যাটবট ফাংশনালিটি আগের মতোই থাকবে
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const chatBody = document.getElementById('chatBody');
+    const message = input.value.trim();
+    if (message === "") return;
+
+    chatBody.innerHTML += `<div class="message user-msg">${message}</div>`;
+    input.value = "";
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    setTimeout(() => {
+        let reply = botKnowledge["default"];
+        const lowerMsg = message.toLowerCase();
+
+        for (let key in botKnowledge) {
+            if (lowerMsg.includes(key)) {
+                reply = botKnowledge[key];
+                break;
+            }
+        }
+        chatBody.innerHTML += `<div class="message bot-msg">${reply}</div>`;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }, 600);
+}
+
+        // ৩. চ্যাটবট ফাংশনালিটি
+        function toggleChat() {
+            const chat = document.getElementById('chatbot-container');
+            chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function handleChatKey(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const chatBody = document.getElementById('chatBody');
+            const message = input.value.trim();
+
+            if (message === "") return;
+
+            // ইউজারের মেসেজ যোগ করা
+            chatBody.innerHTML += `<div class="message user-msg">${message}</div>`;
+            input.value = "";
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // বটের উত্তর (Auto Reply Logic)
+            setTimeout(() => {
+                let reply = "I'm still learning! Please contact us at +8801940538340 for this info.";
+                const lowerMsg = message.toLowerCase();
+
+                // কিওয়ার্ড ম্যাচিং লজিক
+                for (let key in botKnowledge) {
+                    if (lowerMsg.includes(key)) {
+                        reply = botKnowledge[key];
+                        break;
+                    }
+                }
+
+                chatBody.innerHTML += `<div class="message bot-msg">${reply}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 600);
+        }
+
+        window.onload = loadFeaturedRooms;
+        window.addEventListener('storage', loadFeaturedRooms);
+    </script>
+</body>
+</html>

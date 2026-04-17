@@ -1,0 +1,541 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #0f172a; /* Deep midnight blue */
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Global Lighting Background */
+body::before {
+    content: '';
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 210, 255, 0.15), transparent 70%);
+    top: -100px;
+    right: -100px;
+    z-index: -1;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(112, 0, 255, 0.1), transparent 70%);
+    bottom: -200px;
+    left: -200px;
+    z-index: -1;
+}
+
+/* Navbar - Frosted Glass */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00d2ff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #cbd5e1;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #00d2ff;
+    text-shadow: 0 0 8px rgba(0, 210, 255, 0.8);
+}
+
+/* Hero Section */
+.hero {
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    background: linear-gradient(to right, #fff, #00d2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Features Section */
+.features {
+    padding: 80px 8%;
+    text-align: center;
+}
+
+.features h1 {
+    margin-bottom: 60px;
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+.feature-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 50px;
+}
+
+.box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    cursor: default;
+    backdrop-filter: blur(5px);
+}
+
+/* Feature Box Hover Effect - "The Glow Up" */
+.box:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #00d2ff;
+    box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
+    color: #00d2ff;
+}
+
+/* Footer */
+footer {
+    padding: 40px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 50px;
+}
+
+footer p {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.hero .overlay {
+    animation: float 4s ease-in-out infinite;
+}
+/* Constant Color-Shifting RGB Effect */
+.rgb-shifting {
+    /* High saturation colors for a better "light" effect */
+    background: linear-gradient(
+        to right, 
+        #ff0000, #00ff00, #0000ff, #ff0000
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* Dual animation: sliding the gradient AND rotating the hue */
+    animation: 
+        slide-bg 2s linear infinite,
+        hue-cycle 3s linear infinite;
+    
+    font-weight: 800;
+    /* This creates the "glow" that changes color with the text */
+    filter: drop-shadow(0 0 8px currentColor); 
+}
+
+/* Animation 1: Moves the colors across the text */
+@keyframes slide-bg {
+    to { background-position: 200% center; }
+}
+
+/* Animation 2: Changes the actual colors every moment */
+@keyframes hue-cycle {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(360deg); }
+}
+
+
+
+
+
+
+
+
+
+/* Chat Widget Container */
+#chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#chat-open-btn {
+    background: linear-gradient(135deg, #00d2ff, #7e22ce);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-weight: bold;
+}
+
+#chat-container {
+    width: 300px;
+    height: 400px;
+    background: #161e2d;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+#chat-header {
+    background: #1e293b;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    font-weight: bold;
+    color: #00d2ff;
+}
+
+#chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+}
+
+.bot-msg {
+    background: #334155;
+    padding: 8px 12px;
+    border-radius: 10px 10px 10px 0;
+    font-size: 0.9rem;
+    align-self: flex-start;
+}
+
+.user-msg {
+    background: #00d2ff;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 10px 10px 0 10px;
+    font-size: 0.9rem;
+    align-self: flex-end;
+}
+
+#chat-input-area {
+    display: flex;
+    padding: 10px;
+    background: #1e293b;
+}
+
+#user-input {
+    flex: 1;
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#chat-input-area button {
+    background: #00d2ff;
+    border: none;
+    margin-left: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+#chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+#chat-open-btn { background: #00d2ff; color: #000; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+#chat-container { width: 300px; height: 400px; background: #161e2d; border: 1px solid #00d2ff; border-radius: 10px; flex-direction: column; }
+#chat-header { background: #1e293b; color: #00d2ff; padding: 10px; display: flex; justify-content: space-between; border-radius: 10px 10px 0 0; }
+#chat-messages { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.bot-msg { background: #334155; color: white; padding: 8px; border-radius: 5px; align-self: flex-start; max-width: 80%; }
+.user-msg { background: #00d2ff; color: black; padding: 8px; border-radius: 5px; align-self: flex-end; max-width: 80%; }
+#chat-input-area { display: flex; padding: 10px; border-top: 1px solid #334155; }
+#user-input { flex: 1; background: #0f172a; color: white; border: 1px solid #334155; padding: 5px; border-radius: 3px; }
+#chat-input-area button { background: #00d2ff; border: none; padding: 5px 10px; margin-left: 5px; cursor: pointer; border-radius: 3px; }
+
+
+
+
+
+
+
+
+/* --- Global Reset & Variables --- */
+:root {
+    --primary-cyan: #00d2ff;
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --text-white: #ffffff;
+    --text-gray: #94a3b8;
+    --accent-purple: #7e22ce;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--primary-cyan);
+    font-size: 2.5rem;
+}
+
+/* --- 1. Statistics Counter --- */
+.stats {
+    padding: 60px 20px;
+    background: linear-gradient(180deg, #0f172a 0%, #161e2d 100%);
+}
+
+.stat-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-cyan);
+}
+
+.stat-item i {
+    font-size: 2.5rem;
+    color: var(--primary-cyan);
+    margin-bottom: 15px;
+}
+
+.stat-item h2 {
+    font-size: 2rem;
+    margin: 10px 0;
+}
+
+/* --- 2. Featured Rooms --- */
+.room-preview {
+    padding: 80px 20px;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.room-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.room-card:hover {
+    box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
+}
+
+.room-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.room-info {
+    padding: 20px;
+}
+
+.btn {
+    background: var(--primary-cyan);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* --- 3. How It Works --- */
+.how-it-works {
+    background: #161e2d;
+    padding: 80px 20px;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.step {
+    text-align: center;
+    position: relative;
+}
+
+.step-num {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-cyan);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto 20px;
+}
+
+/* --- 4. Testimonials --- */
+.testimonials {
+    padding: 80px 20px;
+}
+
+.test-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.test-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 400px;
+    font-style: italic;
+    border-left: 5px solid var(--primary-cyan);
+}
+
+/* --- 5. Professional Footer --- */
+footer {
+    background: #0a0f1a;
+    padding: 60px 20px 20px;
+    border-top: 1px solid #334155;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: var(--text-gray);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--primary-cyan);
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    font-size: 1.5rem;
+}
+
+.social-icons a {
+    color: var(--text-white);
+}
+
+.social-icons a:hover {
+    color: var(--primary-cyan);
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #334155;
+    margin: 40px 0 20px;
+}
+
+.copyright {
+    text-align: center;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+}

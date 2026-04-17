@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Hostel - Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --sidebar-bg: #161e2d;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --accent-cyan: #00d2ff;
+            --accent-purple: #7e22ce;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --text-gray: #94a3b8;
+            --border-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-dark); color: white;
+            font-family: 'Segoe UI', sans-serif; margin: 0; display: flex;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 250px; background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-glass); padding: 30px 20px;
+            position: fixed; height: 100vh; box-sizing: border-box; z-index: 100;
+        }
+        .sidebar h2 { color: var(--accent-cyan); font-size: 1.4rem; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 2px; }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar ul li {
+            padding: 15px; margin-bottom: 10px; border-radius: 12px;
+            cursor: pointer; color: var(--text-gray); display: flex; align-items: center; gap: 15px; transition: 0.3s;
+        }
+        .sidebar ul li.active, .sidebar ul li:hover { background: rgba(0, 210, 255, 0.1); color: white; border-left: 4px solid var(--accent-cyan); }
+        .btn-logout { color: #f87171 !important; margin-top: 50px !important; }
+
+        .main-content { margin-left: 250px; padding: 40px; width: calc(100% - 250px); box-sizing: border-box; }
+
+        /* --- Header & Welcome --- */
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .welcome-box {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            padding: 25px; border-radius: 20px; flex-grow: 1; margin-right: 20px;
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2);
+        }
+
+        .id-card-trigger {
+            background: var(--card-bg); border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan); padding: 15px 25px; border-radius: 15px;
+            cursor: pointer; text-align: center; transition: 0.3s;
+        }
+        .id-card-trigger:hover { background: var(--accent-cyan); color: #000; }
+
+        /* --- Notice Slider --- */
+        .notice-panel {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-glass);
+            border-radius: 20px; padding: 20px; margin-bottom: 30px; position: relative; overflow: hidden;
+        }
+        .notice-slider { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .notice-slide { min-width: 100%; box-sizing: border-box; }
+        .notice-slide h4 { margin: 0; color: #fbbf24; font-size: 1.1rem; margin-bottom: 5px; }
+        .notice-slide p { margin: 0; color: var(--text-gray); font-size: 0.95rem; }
+
+        /* --- Dashboard Grid --- */
+        .dashboard-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .glass-panel {
+            background: var(--card-bg); border: 1px solid var(--border-glass);
+            padding: 25px; border-radius: 24px; backdrop-filter: blur(10px);
+        }
+
+        .panel-title {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 10px;
+        }
+        .panel-title h3 { margin: 0; font-size: 1rem; color: var(--accent-cyan); text-transform: uppercase; }
+
+        /* --- Inputs & Buttons --- */
+        .btn-action {
+            background: var(--accent-cyan); border: none; color: #000;
+            padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;
+        }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3); }
+
+        textarea, select {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass);
+            color: white; padding: 12px; border-radius: 10px; margin-bottom: 15px; box-sizing: border-box;
+        }
+
+        /* --- ID Card Modal --- */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        }
+        .v-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            width: 340px; padding: 30px; border-radius: 25px; border: 1px solid var(--accent-cyan);
+            text-align: center; position: relative; box-shadow: 0 0 40px rgba(0, 210, 255, 0.2);
+        }
+        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent-cyan); margin-bottom: 15px; }
+        .qr-box { background: white; padding: 10px; display: inline-block; border-radius: 12px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Smart Hostel</h2>
+        <ul>
+            <li class="active"><i class="fa fa-th-large"></i> Dashboard</li>
+            <li><i class="fa fa-bed"></i> Rooms</li>
+            <li><i class="fa fa-file-invoice-dollar"></i> Payments</li>
+            <li class="btn-logout"><i class="fa fa-sign-out-alt"></i> Logout</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header-flex">
+            <div class="welcome-box">
+                <h1>Welcome, Syed Rifat</h1>
+                <p>Room: 402-B | Status: Active Resident</p>
+            </div>
+            <div class="id-card-trigger" onclick="toggleID(true)">
+                <i class="fa fa-id-badge fa-2x"></i>
+                <p style="margin: 5px 0 0 0; font-size: 0.7rem; font-weight: bold;">VIEW ID</p>
+            </div>
+        </div>
+
+        <div class="notice-panel">
+            <div class="notice-slider" id="noticeSlider">
+                <div class="notice-slide">
+                    <h4><i class="fa fa-bullhorn"></i> Laundry Schedule Updated</h4>
+                    <p>Laundry collection is now moved to 10:00 AM every Monday and Thursday.</p>
+                </div>
+                <div class="notice-slide">
+                    <h4><i class="fa fa-wifi"></i> WiFi Maintenance</h4>
+                    <p>Expect brief downtime tonight at 2:00 AM for router upgrades.</p>
+                </div>
+                <div class="notice-slide">
+                    <h4><i class="fa fa-star"></i> Friday Special Dinner</h4>
+                    <p>Don't miss the BBQ Night on the rooftop this Friday at 8:30 PM!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="glass-panel">
+                <div class="panel-title">
+                    <h3><i class="fa fa-user-secret"></i> Anonymous Complaint</h3>
+                    <span style="color: var(--accent-red); font-size: 0.7rem; font-weight: bold;">SECURE</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 15px;">Your identity remains hidden from the management.</p>
+                
+                <select id="compCategory">
+                    <option value="Food">Food & Mess Issues</option>
+                    <option value="Cleaning">Cleaning & Hygiene</option>
+                    <option value="Noise">Roommate/Noise Issue</option>
+                    <option value="Maintenance">Electrical/Plumbing</option>
+                </select>
+                
+                <textarea id="compText" rows="4" placeholder="Describe your concern here..."></textarea>
+                
+                <button class="btn-action" style="background: var(--accent-red); color: white;" onclick="submitComplaint()">
+                    SUBMIT ANONYMOUSLY
+                </button>
+            </div>
+
+            <div class="glass-panel">
+                <div class="panel-title">
+                    <h3><i class="fa fa-utensils"></i> Today's Meals</h3>
+                </div>
+                <div style="display:flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span>Breakfast (8:00 AM)</span>
+                    <input type="checkbox" checked>
+                </div>
+                <div style="display:flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span>Lunch (1:30 PM)</span>
+                    <input type="checkbox" checked>
+                </div>
+                <div style="display:flex; justify-content: space-between; margin-bottom: 20px;">
+                    <span>Dinner (9:00 PM)</span>
+                    <input type="checkbox" checked>
+                </div>
+                <button class="btn-action">SAVE MEAL PLAN</button>
+            </div>
+
+            <div class="glass-panel">
+                <div class="panel-title">
+                    <h3><i class="fa fa-running"></i> Gate Pass</h3>
+                </div>
+                <div style="display:flex; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn-action" style="background: var(--accent-orange);" onclick="alert('Exit logged')">EXIT</button>
+                    <button class="btn-action" style="background: #10b981; color: white;" onclick="alert('Entry logged')">ENTRY</button>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-gray); text-align: center;">Last Entry: 09:45 PM</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="idModal" class="modal" onclick="toggleID(false)">
+        <div class="v-card" onclick="event.stopPropagation()">
+            <img src="https://i.pravatar.cc/150?u=syedrifat" alt="User" class="profile-img">
+            <h2 style="margin: 5px 0;">Syed Rifat</h2>
+            <p style="color: var(--accent-cyan); font-weight: bold; margin-bottom: 15px;">SH-2026-890</p>
+            
+            <div style="text-align: left; font-size: 0.85rem; border-top: 1px solid var(--border-glass); padding-top: 15px;">
+                <p><b>Room:</b> 402 (Master Bed)</p>
+                <p><b>Blood Group:</b> B+ (Positive)</p>
+                <p><b>Contact:</b> +880 19xx-xxxxxx</p>
+            </div>
+            
+            <div class="qr-box">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=SH-RIFAT-2026" alt="QR">
+            </div>
+            <p style="margin-top: 10px; font-size: 0.6rem; color: var(--text-gray);">AUTHORIZED RESIDENT OF SMART HOSTEL</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Notice Slider Logic ---
+        let slideIndex = 0;
+        const slider = document.getElementById('noticeSlider');
+        setInterval(() => {
+            slideIndex = (slideIndex + 1) % 3;
+            slider.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }, 5000);
+
+        // --- ID Card Modal Logic ---
+        function toggleID(show) {
+            document.getElementById('idModal').style.display = show ? 'flex' : 'none';
+        }
+
+        // --- Complaint Logic ---
+        function submitComplaint() {
+            const category = document.getElementById('compCategory').value;
+            const text = document.getElementById('compText').value;
+
+            if (!text.trim()) {
+                alert("Please enter complaint details.");
+                return;
+            }
+
+            // Save to localStorage (Admin will read from here)
+            const complaints = JSON.parse(localStorage.getItem('anonymousComplaints')) || [];
+            complaints.push({
+                category: category,
+                message: text,
+                time: new Date().toLocaleString(),
+                status: 'Unread'
+            });
+            localStorage.setItem('anonymousComplaints', JSON.stringify(complaints));
+
+            alert("Success! Your anonymous complaint has been sent.");
+            document.getElementById('compText').value = "";
+        }
+    </script>
+</body>
+</html>
